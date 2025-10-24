@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email Reminder System — Demo</title>
+  <meta name="description" content="Frontend demo of an Email Reminder System (client-side scheduling, mailto integration, localStorage)." />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container" role="application" aria-labelledby="appTitle">
+    <header>
+      <div>
+        <h1 id="appTitle">Email Reminder System </h1>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <p class="small muted">Status: <span id="status">Idle</span></p>
+        <p class="small muted">Scheduler: <span id="schedulerState">Running</span></p>
+      </div>
+    </header>
+    <div class="grid" role="main">
+      <section class="card" aria-label="Create or edit reminder">
+        <h2 style="margin-top:0;margin-bottom:6px">Create / Edit Reminder</h2>
+
+        <form id="remForm" onsubmit="return false" autocomplete="off" aria-describedby="formHint">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
+            <div style="flex:1">
+              <label for="recipient">Recipient Email</label>
+              <input id="recipient" type="email" required placeholder="friend@example.com" />
+            </div>
+            <div style="width:120px">
+              <label for="priority">Priority</label>
+              <select id="priority" aria-label="priority selector">
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+          </div>
+          <label for="subject">Subject</label>
+          <input id="subject" type="text" placeholder="Subject for email" required />
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="Write the email body..." required></textarea>
+          <div style="display:flex;gap:10px;margin-top:8px;align-items:center">
+            <div style="flex:1">
+              <label for="when">Date & time</label>
+              <input id="when" type="datetime-local" required />
+            </div>
+            <div style="width:160px">
+              <label for="repeat">Repeat</label>
+              <select id="repeat">
+                <option value="none">None</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:12px;align-items:center">
+            <button id="saveBtn" class="btn" type="button">Save Reminder</button>
+            <button id="testBtn" class="btn secondary" type="button">Send Test (open mail)</button>
+            <button id="clearBtn" class="btn secondary" type="button">Clear Form</button>
+          </div>
+          <p id="formHint" class="muted" style="margin-top:10px">Tips: Keep this page open for the scheduler to trigger reminders. Allow notifications when prompted.</p>
+        </form>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button id="exportBtn" class="btn secondary">Export Reminders</button>
+          <input id="importFile" type="file" accept=".json" style="display:none" />
+          <button id="importBtn" class="btn secondary">Import Reminders</button>
+          <button id="clearAllBtn" class="btn danger" title="Delete all reminders">Delete All</button>
+        </div>
+      </section>
+      <section class="card" aria-label="Reminders list">
+        <h2 style="margin-top:0;margin-bottom:6px">Your Reminders</h2>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+          <input id="search" type="text" placeholder="Search by email, subject or message" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.02)" />
+          <select id="filter">
+            <option value="all">All</option>
+            <option value="due">Due</option>
+            <option value="future">Future</option>
+            <option value="sent">Sent</option>
+          </select>
+        </div>
+        <div id="list" class="list" aria-live="polite"></div>
+        <footer>
+          <div class="muted">Next check: <span id="nextCheck">--</span></div>
+          <div class="controls">
+            <div class="muted">Auto-check every <strong id="intervalLabel">15s</strong></div>
+            <button id="toggleSched" class="btn secondary">Pause Scheduler</button>
+          </div>
+        </footer>
+      </section>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
